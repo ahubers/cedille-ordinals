@@ -1,0 +1,16 @@
+import Ordinals.
+
+
+module arithmetic-thms.
+
+one : ∀ X: ★. Ord ·X = Λ X. suc (zer ·X).
+two : ∀ X: ★. Ord ·X = Λ X. suc (one ·X).
+
+-- "Unit Test" -- one + one does indeed equal two.
+_ : { ordAdd one one ≃ two } = β.
+
+
+-- Addition should be associative
+addAssociative : ∀ X: ★. ∀ a: Ord ·X. ∀ b: Ord ·X. ∀ c: Ord ·X.
+	       { ordAdd (ordAdd a b) c ≃ ordAdd a (ordAdd b c) }
+	       = ●.

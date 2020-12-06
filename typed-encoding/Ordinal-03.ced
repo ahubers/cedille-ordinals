@@ -1,0 +1,62 @@
+import stdlib.
+
+import rec.
+
+module Ordinal-03.
+
+
+-- Define Ord as an inductive datatype.
+data Ord: ★
+     = zer : Ord 
+     | suc : Ord ➔ Ord
+     | lim : (Nat ➔ Ord) ➔ Ord.
+
+
+-- we can now define recursion on an ordinal via
+-- pattern matching.  Defining recursion in this
+-- way saves us the hassle of doing it on a
+-- per-operation basis.
+o-rec : ∀ X: ★. X ➔ (X ➔ X) ➔ ((Nat ➔ X) ➔ X) ➔ Ord ➔ X
+      = Λ X. λ base. λ step. λ limit. λ o. μ o-rec'. o {
+      | zer ➔ base
+      | suc o' ➔ step (o-rec' o')
+      | lim l ➔ limit (λ n. o-rec' (l n))
+}.
+
+
+-- We can define all of our operations succinctly via o-rec.
+ordAdd : Ord ➔ Ord ➔ Ord
+       = λ a. o-rec a suc lim.
+
+one : Ord = suc zer.
+two : Ord = suc one.
+three : Ord = suc two.
+four : Ord = suc three.
+
+ordMul : Ord ➔ Ord ➔ Ord
+       = λ a. o-rec zer (λ r. ordAdd r a) lim.
+
+ordExp : Ord ➔ Ord ➔ Ord
+       = λ a. o-rec (suc zer) (λ r. ordMul r a) lim.
+
+
+-- Defining Omega
+-------------------------------------------------
+
+-- We can get Omega and epsilon_0 in the same way as we did in
+-- implicit-02.
+
+finiteOrdinals : Nat ➔ Ord = rec zer suc.
+omega : Ord = lim finiteOrdinals.
+
+_ : { ordAdd omega one ≃ suc omega } = β.
+
+-- Omega tower is the act of recursing repeated
+-- omega exponentiation over omega as base,
+-- which we get becaouse of our uniform typing of ordExp.
+omegaTower : Nat ➔ Ord
+= rec omega (ordExp omega).
+
+-- And now we take the limit...
+-- and get ε_0!
+epsilon0 : Ord = lim omegaTower.

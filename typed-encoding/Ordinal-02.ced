@@ -1,0 +1,70 @@
+import stdlib.
+
+import rec.
+
+module Ordinal-02.
+
+-- Can we redefine these uniformly using Cedille's
+-- Impredicative quantification?
+-------------------------------------------------
+
+Ord : ★ = ∀ X: ★.
+    X ➔             -- Base
+    (X ➔ X) ➔       -- Step
+    ((Nat ➔ X) ➔ X) -- Limit
+    ➔ X.
+
+-- Given a base case, a step case, and a limit case, produce
+-- an Ord ➔ X function that recurses over ordinals to
+-- produce an X.
+o-rec : ∀ X: ★. X ➔ (X ➔ X) ➔ ((Nat ➔ X) ➔ X) ➔ Ord ➔ X
+      = Λ X. λ z. λ s. λ l. λ o. o z s l.
+
+-- Our constructors
+zer : Ord
+     = Λ X. λ z. λ s. λ l. z.
+
+suc : Ord ➔ Ord
+     = λ a. Λ X. λ z. λ s. λ l. s (a z s l).
+
+lim : (Nat ➔ Ord) ➔ Ord
+     = λ f. Λ X. λ z. λ s. λ l. l (λ n. f n z s l).
+
+one : Ord = suc zer.
+two : Ord = suc one.
+
+-- And yes we can get a uniform definition with
+-- the implicit quantification over X.
+ordAdd : Ord ➔ Ord ➔ Ord
+    	= λ a. λ b. Λ X. λ z. λ s. λ l. a (b z s l) s l.
+
+ordMul : Ord ➔ Ord ➔ Ord
+       = λ a. o-rec (zer) (λ r. ordAdd r a) lim.
+
+ordExp : Ord ➔ Ord ➔ Ord
+       = λ a. o-rec (suc zer) (λ r. ordMul r a) lim.
+
+
+-- Defining Omega
+-------------------------------------------------
+
+-- We define the limit of a mapping (Nat -> Ord ·X)
+-- as the Ordinal you get when letting n: Nat -> infinity.
+
+finiteOrdinals : Nat ➔ Ord = rec zer suc.
+omega : Ord = lim finiteOrdinals.
+
+
+-- Omega tower is the act of recursing repeated
+-- omega exponentiation over omega as base,
+-- which we get becaouse of our uniform typing of ordExp.
+omegaTower : Nat ➔ Ord
+= rec omega (ordExp omega).
+
+-- And now we take the limit...
+-- and get ε_0!
+epsilon0 : Ord = lim omegaTower.
+
+
+-- in DataType.ced we try to reproduce the same results
+-- but with Cedilles (derived) inductive data types.

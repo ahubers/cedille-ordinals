@@ -1,0 +1,17 @@
+import stdlib.
+
+import rec.
+import Ordinal-03.
+
+module ordinal-thms.
+
+-- for some ordinal o, o + 1 == suc o.
+addOneRight : Π o: Ord. { ordAdd o one  ≃ suc o } = λ o. β.
+
+-- 1 + ω should equal ω.
+onePlusOmega : { ordAdd one omega ≃ omega } = β.
+
+omegaSucc : Nat ➔ Ord = rec omega suc.
+omegaTimes2 : Ord = lim omegaSucc.
+
+_ : { ordMul omega two ≃ omegaTimes2 } = β.

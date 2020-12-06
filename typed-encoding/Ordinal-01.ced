@@ -1,0 +1,70 @@
+import stdlib.
+import rec.
+
+-- This file is a translation (and extension) to Cedille of
+-- Martin Escardo's implementation of the Ordinals in Agda,
+-- found here:
+-- https://www.cs.bham.ac.uk/~mhe/papers/ordinals/ordinals.html.
+module Ordinal-01.
+
+
+-- The Ord datatype
+--------------------------------------------------
+
+-- Church ordinal trees.
+--
+-- Note that Ord is itself a Functor carrying
+-- _any_ data type X.
+Ord : ★ ➔ ★ = λ X: ★.
+    X ➔ -- Base
+    (X ➔ X) ➔ -- Step
+    ((Nat ➔ X) ➔ X) -- Limit
+    ➔ X.
+
+-- Our Ordinal constructors (for each case)
+zer : ∀ X: ★. Ord ·X
+     = Λ X. λ z. λ s. λ l. z.
+
+suc : ∀ X: ★. Ord ·X ➔ Ord ·X
+     = Λ X. λ a. λ z. λ s. λ l. s (a z s l).
+
+lim : ∀ X: ★. (Nat ➔ Ord ·X) ➔ Ord ·X
+    = Λ X. λ f. λ z. λ s. λ l. l (λ i. f i z s l).
+
+-- This is primitive recursion over an
+-- Ordinal. Note that Ord has not been defined
+-- inductively, so we cannot use μ; additionally,
+-- Cedille will not let us recurse by construction
+-- as you can't reference an undefined term.
+o-rec : ∀ X: ★. X ➔ (X ➔ X) ➔ ((Nat ➔ X) ➔ X) ➔ Ord ·X ➔ X
+      = Λ X. λ z. λ s. λ l. λ o. o z s l.
+
+-- Ordinal arithmetic operators
+-------------------------------------------------
+ordAdd : ∀ X: ★. Ord ·X ➔ Ord ·X ➔ Ord ·X
+    = Λ X. λ a. λ b. λ z. λ s. λ l. a (b z s l) s l.
+
+-- Here Escardo defines multiplication, noting
+-- that the type is not uniform with addition.
+
+ordMul : ∀ X: ★. Ord ·X ➔ Ord ·(Ord ·X) ➔ Ord ·X
+       = Λ X. λ a. o-rec (zer ·X) (λ r. ordAdd r a) (lim ·X).
+
+
+-- Similarly, ordinal exponentiation is not uniformly typed.
+
+ordExp : ∀ X: ★. Ord ·(Ord ·X) ➔ Ord ·(Ord ·X) ➔ Ord ·X
+       = Λ X. λ a. o-rec (suc (zer ·X)) (λ r. ordMul r a) (lim ·X).
+
+
+-- To reach epsilon_0, we'd like to take the limit of some omega tower, like so:
+omegaTower : ∀ X: ★. Nat ➔ Ord ·X
+= Λ X. rec (omega ·X) ((ordExp ·X) (omega ·X)).
+
+-- However this doesn't type check due to type signature of ordExp.
+-- expected-type : Ord ·X ➔ Ord ·X
+-- type		 : Ord ·(Ord ·X) ➔ Ord ·X
+
+-- in ./implicit.ced we Change X from an explicit type variable
+-- to an implicit type variable, and use Cedille's impredicative quantification
+-- universe to avoid such an issue.

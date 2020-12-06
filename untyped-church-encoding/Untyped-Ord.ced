@@ -1,0 +1,28 @@
+import core.top.
+
+module Untyped-Ord.
+
+-- In this file we'll implement ordinals in untyped lambda
+-- calculus following Church and Kleene in "Formal
+-- Definitions of Ordinal Numbers", 1930 something.
+--------------------------------------------------------------------------------
+
+-- In Cedille, we can "type" any untyped term by giving it
+-- type "Top" and encapsulating its body with β{| ... |}.
+-- Here we first define id and the naturals as they are
+-- expected.
+id    : Top = β{| λ x. x |}.
+zero  : Top = β{| λ f. λ x. x |}.
+succ  : Top = β{| λ n. λ f. λ x. f ((n f) x) |}.
+
+one   : Top = β{| λ f. λ x. f x |}.
+two   : Top = β{| λ f. λ x. succ one |}.
+three : Top = β{| λ f. λ x. succ two |}.
+four  : Top = β{| λ f. λ x. succ three |}.
+
+zero_o : Top = β{| λ m. m one |}.
+succ_o : Top = β{| λ a. λ m. (m two) a |}.
+limit  : Top = β{| λ a. λ r. λ m. ((m three) a) r |}.
+
+-- Per the paper, we can define ω as follows:
+omega : Top = β{| (limit zero_o) id |}.
