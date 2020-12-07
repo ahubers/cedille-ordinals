@@ -1,16 +1,32 @@
-import Ordinals.
-
+import Ordinal-03.
+import order.
 
 module arithmetic-thms.
 
-one : ∀ X: ★. Ord ·X = Λ X. suc (zer ·X).
-two : ∀ X: ★. Ord ·X = Λ X. suc (one ·X).
 
--- "Unit Test" -- one + one does indeed equal two.
-_ : { ordAdd one one ≃ two } = β.
+-- Basic definitions of Addition
+------------------------------------------------------------
+
+addBaseCase : Π a: Ord. OrdEq (ordAdd a zer) a
+= refl.
+
+-- Step case
+addStepCase : Π a: Ord. Π b: Ord.
+	    OrdEq
+	    (ordAdd a (ordAdd b one))
+	    (ordAdd (ordAdd a b) one)
+= λ a. μ uh. a {
+  | zer ➔ ●
+  | suc a' ➔ ●
+  | lim l ➔ ●
+}.
 
 
 -- Addition should be associative
-addAssociative : ∀ X: ★. ∀ a: Ord ·X. ∀ b: Ord ·X. ∀ c: Ord ·X.
-	       { ordAdd (ordAdd a b) c ≃ ordAdd a (ordAdd b c) }
-	       = ●.
+addAssociative : Π a: Ord. Π b: Ord. Π c: Ord.
+	         OrdEq (ordAdd (ordAdd a b) c) (ordAdd a (ordAdd b c))
+= λ a. λ b. λ c. μ ih. a {
+  | zer ➔ ●
+  | suc a' ➔ ●
+  | lim l ➔ ●
+}.
