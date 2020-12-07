@@ -1,5 +1,5 @@
 import Ordinal-03.
-import order.
+import ordEq.
 
 module arithmetic-thms.
 

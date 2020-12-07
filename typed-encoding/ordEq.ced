@@ -2,7 +2,7 @@ import stdlib.
 
 import Ordinal-03.
 
-module order.
+module ordEq.
 
 data OrdEq: Ord ➔ Ord ➔ ★ =
   | zEq : OrdEq zer zer

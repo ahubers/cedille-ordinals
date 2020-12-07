@@ -1,17 +1,25 @@
 import stdlib.
 
 import rec.
+import ordEq.
 import Ordinal-03.
 
 module ordinal-thms.
 
--- for some ordinal o, o + 1 == suc o.
-addOneRight : Π o: Ord. { ordAdd o one  ≃ suc o } = λ o. β.
+-- for some ordinal a, a + 1 == suc a.
+addOneRight : Π a: Ord. OrdEq (ordAdd a one) (suc a)
+= λ a. μ ih. a {
+  | zer ➔ ●
+  | suc a' ➔ ●
+  | lim l ➔ ●
+
+}.
 
 -- 1 + ω should equal ω.
-onePlusOmega : { ordAdd one omega ≃ omega } = β.
+onePlusOmega : OrdEq (ordAdd one omega) (omega) = ●.
 
 omegaSucc : Nat ➔ Ord = rec omega suc.
 omegaTimes2 : Ord = lim omegaSucc.
 
-_ : { ordMul omega two ≃ omegaTimes2 } = β.
+-- ω * 2 == lim(ω, ω + 1, ω + 2, ...)
+omegaTimes2pf : OrdEq (ordMul omega two) omegaTimes2 = ●.
