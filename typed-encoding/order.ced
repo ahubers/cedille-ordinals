@@ -4,43 +4,7 @@ import Ordinal-03.
 
 module order.
 
-
-limT  : ★ = ∀ X: ★. (Nat ➔ X) ➔ X.
-limEq : Π l1: limT. Π l2: limT. ∀ n: Nat. { l1 n ≃ l2 n } ➔ { l1 ≃ l2}
-= λ l1. λ l2. Λ n. λ pf. ●.
-
--- We need to define extensional equality on
--- ordinals for theorem proving purposes.
--- Checking that two ords are beta-eta equivalent
--- is not sufficient...
-ordEq : Ord ➔ Ord ➔ Bool
-= λ a. μ eq'. a {
-  | zer ➔  λ b. σ b {
-      | zer ➔ tt
-      | suc _ ➔ ff
-      | lim _ ➔ ff
-    }
-  | suc a' ➔ λ b. σ b {
-      | zer ➔ ff
-      | suc b' ➔ eq' a' b'
-      | lim _ ➔ ff
-    }    
-  | lim l ➔ λ b. σ b {
-      | zer ➔ ff
-      | suc _ ➔ ff
-      -- we want a proof that l and l' are extensionally equal over all nats.
-      | lim l' ➔ ●
-    }
-}.
-
-
-
-
--- extensionalEquality : ★ = Π a: Ord. Π b: Ord. { ordEq a b ≃ tt } ➔ 
-
--- ordLt : Ord ➔ Ord ➔ Bool
--- = λ a. λ b. σ a {
---   | zer ➔ ff
---   | suc a' ➔ ●
---   | lim l ➔ ●
--- }.
+data OrdEq: Ord ➔ Ord ➔ ★ =
+  | zEq : OrdEq zer zer
+  | sucEq : ∀ a: Ord. ∀ b: Ord. OrdEq a b ➔ OrdEq (suc a) (suc b)
+  | limEq : ∀ l1: Nat ➔ Ord. ∀ l2: Nat ➔ Ord. (∀ n: Nat. OrdEq (l1 n) (l2 n)) ➔ OrdEq (lim l1) (lim l2).
