@@ -8,3 +8,9 @@ data OrdEq: Ord ➔ Ord ➔ ★ =
   | zEq : OrdEq zer zer
   | sucEq : ∀ a: Ord. ∀ b: Ord. OrdEq a b ➔ OrdEq (suc a) (suc b)
   | limEq : ∀ l1: Nat ➔ Ord. ∀ l2: Nat ➔ Ord. (∀ n: Nat. OrdEq (l1 n) (l2 n)) ➔ OrdEq (lim l1) (lim l2).
+
+
+data OrdLt : Ord ➔ Ord ➔ ★ =
+  | zLt : OrdLt zer zer
+  | sucLt : ●
+  | limlt : ●.
