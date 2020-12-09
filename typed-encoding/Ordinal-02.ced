@@ -48,6 +48,18 @@ ordExp : Ord ➔ Ord ➔ Ord
 -- Defining Omega
 -------------------------------------------------
 
+-- Recursion over any type X, indexed by Nat.
+-- You can think of this as generalized primitive recursion --
+-- if you give me a base X and a step X ➔ X, I give you a
+-- Nat ➔ X function.
+rec' : ∀ X: ★. X ➔ (X ➔ X) ➔ Nat ➔ X =
+    Λ X. λ x. λ f. λ n.
+    μ rec'. n {
+      | zero ➔ x
+      | succ n' ➔ f (rec' n')
+}.
+
+
 -- We define the limit of a mapping (Nat -> Ord ·X)
 -- as the Ordinal you get when letting n: Nat -> infinity.
 
@@ -67,4 +79,5 @@ epsilon0 : Ord = lim omegaTower.
 
 
 -- in DataType.ced we try to reproduce the same results
--- but with Cedilles (derived) inductive data types.
+-- but with Cedille's (derived) inductive data types.
+-- Thereafter we can define an equality relation inductively.

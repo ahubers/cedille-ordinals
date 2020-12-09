@@ -9,13 +9,14 @@ data OrdEq: Ord ➔ Ord ➔ ★ =
   | sucEq : ∀ a: Ord. ∀ b: Ord. OrdEq a b ➔ OrdEq (suc a) (suc b)
   | limEq : ∀ l1: Nat ➔ Ord. ∀ l2: Nat ➔ Ord. (∀ n: Nat. OrdEq (l1 n) (l2 n)) ➔ OrdEq (lim l1) (lim l2).
 
+-- A proof that ordinal a is equal to itself.
 refl : Π a: Ord. OrdEq a a = λ a. μ ih. a {
      | zer ➔ zEq
      | suc a' ➔ sucEq -(to/Ord -isType/ih a') -(to/Ord -isType/ih a') (ih a')
      | lim l ➔ limEq
 		-(λ x. to/Ord -isType/ih (l x))
 		-(λ x. to/Ord -isType/ih (l x))
-	        ●
+	        Λ n. ●
 }.
 
 
