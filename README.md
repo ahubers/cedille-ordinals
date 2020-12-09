@@ -13,11 +13,9 @@ ordinals as Church and Kleene originally defined them in their article *Formal d
 
 ## Further Work
 Here are some things I had hoped to cover but had to restrict from the scope of the final
-report. Some of these I tried and came to dead-ends, some I didn't have time for.
+report. Some of these I tried and came to dead-ends, some I didn't get the time to do.
 
 - Going beyond epsilon_0.
 - Defining addition, multiplication, and exponentiation in the untyped lambda calculi.
-- Defining extensional equality on two Ord data types.
-- Proofs of associativity and distributivity over ordinal addition and multiplication.
-- Casts between different representations found in [typed-encoding](./typed-encoding/).
-- Cantor Normal Form representation.
+- Proofs of associativity and distributivity over ordinal addition and multiplication (usind OrdEq).
+- Casts between the inductive datatype representation and impredicative quantification representation found in [Ordinal-03](./typed-encoding/Ordinal-03.ced) and [Ordinal-02](./typed-encoding/Ordinal-02.ced), respectively.

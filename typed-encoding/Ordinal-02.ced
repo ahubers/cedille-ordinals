@@ -39,10 +39,10 @@ ordAdd : Ord ➔ Ord ➔ Ord
     	= λ a. λ b. Λ X. λ z. λ s. λ l. a (b z s l) s l.
 
 ordMul : Ord ➔ Ord ➔ Ord
-       = λ a. o-rec (zer) (λ r. ordAdd r a) lim.
+       = λ a. o-rec (zer) (λ b. ordAdd b a) lim.
 
 ordExp : Ord ➔ Ord ➔ Ord
-       = λ a. o-rec (suc zer) (λ r. ordMul r a) lim.
+       = λ a. o-rec (suc zer) (λ b. ordMul b a) lim.
 
 
 -- Defining Omega
