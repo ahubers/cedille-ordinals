@@ -1,7 +1,7 @@
 import stdlib.
 
 import rec.
-import ordEq.
+import OrdEq.
 import Ordinal-03.
 
 module ordinal-thms.
@@ -17,6 +17,10 @@ addOneRight : Π a: Ord. OrdEq (ordAdd a one) (suc a)
 
 -- 1 + ω should equal ω.
 onePlusOmega : OrdEq (ordAdd one omega) (omega) = ●.
+
+-- ω + 1 should equal suc ω.
+OmegaPlusOne : OrdEq (ordAdd omega one) (suc omega) = ●.
+
 
 omegaSucc : Nat ➔ Ord = rec omega suc.
 omegaTimes2 : Ord = lim omegaSucc.

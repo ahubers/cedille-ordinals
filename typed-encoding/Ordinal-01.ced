@@ -16,10 +16,10 @@ module Ordinal-01.
 -- Note that Ord is itself a Functor carrying
 -- _any_ data type X.
 Ord : ★ ➔ ★ = λ X: ★.
-    X ➔ -- Base
-    (X ➔ X) ➔ -- Step
-    ((Nat ➔ X) ➔ X) -- Limit
-    ➔ X.
+    X ➔             -- Base
+    (X ➔ X) ➔       -- Step
+    ((Nat ➔ X) ➔ X) ➔ -- Limit
+    X.
 
 -- Our Ordinal constructors (for each case)
 zer : ∀ X: ★. Ord ·X
@@ -36,7 +36,7 @@ lim : ∀ X: ★. (Nat ➔ Ord ·X) ➔ Ord ·X
 -- inductively, so we cannot use μ; additionally,
 -- Cedille will not let us recurse by construction
 -- as you can't reference an undefined term.
-o-rec : ∀ X: ★. X ➔ (X ➔ X) ➔ ((Nat ➔ X) ➔ X) ➔ Ord ·X ➔ X
+o-rec :∀ X: ★. X ➔ (X ➔ X) ➔ ((Nat ➔ X) ➔ X) ➔ Ord ·X ➔ X
       = Λ X. λ z. λ s. λ l. λ o. o z s l.
 
 -- Ordinal arithmetic operators
@@ -56,6 +56,9 @@ ordMul : ∀ X: ★. Ord ·X ➔ Ord ·(Ord ·X) ➔ Ord ·X
 ordExp : ∀ X: ★. Ord ·(Ord ·X) ➔ Ord ·(Ord ·X) ➔ Ord ·X
        = Λ X. λ a. o-rec (suc (zer ·X)) (λ r. ordMul r a) (lim ·X).
 
+
+finiteOrdinals : ∀ X: ★. Nat ➔ Ord ·X = Λ X. rec (zer ·X) (suc ·X).
+omega : ∀ X: ★. Ord ·X = Λ X. lim (finiteOrdinals ·X).
 
 -- To reach epsilon_0, we'd like to take the limit of some omega tower, like so:
 omegaTower : ∀ X: ★. Nat ➔ Ord ·X
