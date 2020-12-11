@@ -22,6 +22,7 @@ onePlusOmega : OrdEq (ordAdd one omega) (omega) = ●.
 OmegaPlusOne : OrdEq (ordAdd omega one) (suc omega) = ●.
 
 
+
 omegaSucc : Nat ➔ Ord = rec omega suc.
 omegaTimes2 : Ord = lim omegaSucc.
 

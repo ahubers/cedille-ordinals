@@ -12,10 +12,9 @@ data Ord: ★
      | lim : (Nat ➔ Ord) ➔ Ord.
 
 
--- we can now define recursion on an ordinal via
--- pattern matching.  Defining recursion in this
--- way saves us the hassle of doing it on a
--- per-operation basis.
+-- we can now define primitive recursion on an ordinal via
+-- pattern matching.  Defining recursion in this way saves
+-- us the hassle of doing it on a per-operation basis.
 o-rec : ∀ X: ★. X ➔ (X ➔ X) ➔ ((Nat ➔ X) ➔ X) ➔ Ord ➔ X
       = Λ X. λ base. λ step. λ limit. λ o. μ o-rec'. o {
       | zer ➔ base
@@ -49,7 +48,6 @@ ordExp : Ord ➔ Ord ➔ Ord
 finiteOrdinals : Nat ➔ Ord = rec zer suc.
 omega : Ord = lim finiteOrdinals.
 
-_ : { ordAdd omega one ≃ suc omega } = β.
 
 -- Omega tower is the act of recursing repeated
 -- omega exponentiation over omega as base,

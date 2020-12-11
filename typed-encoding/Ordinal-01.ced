@@ -32,10 +32,11 @@ lim : ∀ X: ★. (Nat ➔ Ord ·X) ➔ Ord ·X
     = Λ X. λ f. λ z. λ s. λ l. l (λ i. f i z s l).
 
 -- This is primitive recursion over an
--- Ordinal. Note that Ord has not been defined
--- inductively, so we cannot use μ; additionally,
--- Cedille will not let us recurse by construction
--- as you can't reference an undefined term.
+-- Ordinal. You can think of this as:
+-- Give me (for type X) a base case,
+-- a successor case, and a limit case,
+-- and I'll give you an Ord ·X ➔ X function.
+
 o-rec :∀ X: ★. X ➔ (X ➔ X) ➔ ((Nat ➔ X) ➔ X) ➔ Ord ·X ➔ X
       = Λ X. λ z. λ s. λ l. λ o. o z s l.
 
@@ -46,6 +47,8 @@ ordAdd : ∀ X: ★. Ord ·X ➔ Ord ·X ➔ Ord ·X
 
 -- Here Escardo defines multiplication, noting
 -- that the type is not uniform with addition.
+-- This is because, in o-rec, we're instantiating X with
+-- Ord ·X' (where X and X' may differ)
 
 ordMul : ∀ X: ★. Ord ·X ➔ Ord ·(Ord ·X) ➔ Ord ·X
        = Λ X. λ a. o-rec (zer ·X) (λ r. ordAdd r a) (lim ·X).
@@ -57,10 +60,13 @@ ordExp : ∀ X: ★. Ord ·(Ord ·X) ➔ Ord ·(Ord ·X) ➔ Ord ·X
        = Λ X. λ a. o-rec (suc (zer ·X)) (λ r. ordMul r a) (lim ·X).
 
 
+-- We are able to type the finiteOrdinals because successor
+-- is an Ord ·X ➔ Ord ·X function, as desired.
 finiteOrdinals : ∀ X: ★. Nat ➔ Ord ·X = Λ X. rec (zer ·X) (suc ·X).
 omega : ∀ X: ★. Ord ·X = Λ X. lim (finiteOrdinals ·X).
 
--- To reach epsilon_0, we'd like to take the limit of some omega tower, like so:
+-- To reach epsilon_0, we'd like to take the limit of some
+-- omega tower, like so:
 omegaTower : ∀ X: ★. Nat ➔ Ord ·X
 = Λ X. rec (omega ·X) ((ordExp ·X) (omega ·X)).
 
@@ -68,6 +74,7 @@ omegaTower : ∀ X: ★. Nat ➔ Ord ·X
 -- expected-type : Ord ·X ➔ Ord ·X
 -- type		 : Ord ·(Ord ·X) ➔ Ord ·X
 
--- in ./implicit.ced we Change X from an explicit type variable
--- to an implicit type variable, and use Cedille's impredicative quantification
--- universe to avoid such an issue.
+-- in ./implicit.ced we Change X from an explicit type
+-- variable to an implicit type variable, and use Cedille's
+-- impredicative quantification universe to avoid such an
+-- issue.

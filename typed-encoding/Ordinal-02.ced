@@ -33,8 +33,9 @@ lim : (Nat ➔ Ord) ➔ Ord
 one : Ord = suc zer.
 two : Ord = suc one.
 
--- And yes we can get a uniform definition with
--- the implicit quantification over X.
+-- And yes we can get a uniform definition with the implicit
+-- quantification over X.  This is because our definition of
+-- Ord permits us to to instantiate X with Ord (i.,e itself).
 ordAdd : Ord ➔ Ord ➔ Ord
     	= λ a. λ b. Λ X. λ z. λ s. λ l. a (b z s l) s l.
 

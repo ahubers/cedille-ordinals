@@ -3,8 +3,13 @@ import OrdEq.
 
 module arithmetic-thms.
 
+-- Beta-Eta equivalence checking
+------------------------------------------------------------
+-- 1 + ω should equal ω.
+_ : { ordAdd omega one ≃ suc omega } = β.
 
--- Basic definitions of Addition
+
+-- Basic definitions of Addition (using OrdEq)
 ------------------------------------------------------------
 
 addBaseCase : Π a: Ord. OrdEq (ordAdd a zer) a

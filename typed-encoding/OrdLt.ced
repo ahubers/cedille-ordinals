@@ -1,0 +1,12 @@
+import stdlib.
+
+import Ordinal-03.
+
+module OrdLt.
+
+-- Can we define an ordering on our Ordinals?
+OrdLt : Ord ➔ Ord ➔ Bool = λ a. μ ih. a {
+      | zer ➔ λ _. ff
+      | suc a' ➔ ih a'
+      | lim l ➔ ●
+}.
