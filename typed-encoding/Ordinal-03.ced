@@ -48,7 +48,6 @@ ordExp : Ord ➔ Ord ➔ Ord
 finiteOrdinals : Nat ➔ Ord = rec zer suc.
 omega : Ord = lim finiteOrdinals.
 
-
 -- Omega tower is the act of recursing repeated
 -- omega exponentiation over omega as base,
 -- which we get becaouse of our uniform typing of ordExp.

@@ -78,3 +78,6 @@ omegaTower : ∀ X: ★. Nat ➔ Ord ·X
 -- variable to an implicit type variable, and use Cedille's
 -- impredicative quantification universe to avoid such an
 -- issue.
+
+evenFiniteOrdinals :  ∀ X: ★. Ord ·(Ord ·X) ➔ Ord ·X
+             =  Λ X. o-rec (zer ·X) (λ n. suc (suc n)) (lim ·X).
