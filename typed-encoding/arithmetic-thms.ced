@@ -15,12 +15,19 @@ _ : { ordAdd omega one ≃ suc omega } = β.
 addBaseCase : Π a: Ord. OrdEq (ordAdd a zer) a
 = refl.
 
+addZLeft : Π a: Ord. OrdEq (ordAdd zer a) a
+=  λ a. μ ih. a {
+  | zer ➔ zEq
+  | suc a' ➔ ●
+  | lim l ➔ ●
+}.
+
 -- Step case
 addStepCase : Π a: Ord. Π b: Ord.
 	    OrdEq
 	    (ordAdd a (ordAdd b one))
 	    (ordAdd (ordAdd a b) one)
-= λ a. μ uh. a {
+= λ a. λ b. μ ih. a {
   | zer ➔ ●
   | suc a' ➔ ●
   | lim l ➔ ●

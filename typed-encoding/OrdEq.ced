@@ -7,7 +7,11 @@ module ordEq.
 data OrdEq: Ord ➔ Ord ➔ ★ =
   | zEq : OrdEq zer zer
   | sucEq : ∀ a: Ord. ∀ b: Ord. OrdEq a b ➔ OrdEq (suc a) (suc b)
-  | limEq : ∀ l1: Nat ➔ Ord. ∀ l2: Nat ➔ Ord. (∀ n: Nat. OrdEq (l1 n) (l2 n)) ➔ OrdEq (lim l1) (lim l2).
+  -- limEq is extensional equality of two sequences;
+  -- however the sequence {0, 1, 2,..} has the same limit as {1, 2, 3, ...}
+  -- but they are not extensionally equal! A better term for equality would be that
+  -- the sequences are bijective and monotonic, for which you would need a separate definition `ordLt`.
+  | limEq : ∀ l1: Nat ➔ Ord. ∀ l2: Nat ➔ Ord. (Π n: Nat. OrdEq (l1 n) (l2 n)) ➔ OrdEq (lim l1) (lim l2).
 
 -- A proof that ordinal a is equal to itself.  As in Agda
 -- and Coq, you can then use refl any time your tactic is
@@ -16,7 +20,7 @@ refl : Π a: Ord. OrdEq a a = λ a. μ ih. a {
      | zer ➔ zEq
      | suc a' ➔ sucEq -(to/Ord -isType/ih a') -(to/Ord -isType/ih a') (ih a')
      | lim l ➔ [l' : Nat ➔ Ord = λ n. to/Ord -isType/ih (l n) ]
-	        - limEq -l' -l' (Λ n. ●)
+	        - limEq -l' -l' (λ n. ih (l n))
 }.
 
 
