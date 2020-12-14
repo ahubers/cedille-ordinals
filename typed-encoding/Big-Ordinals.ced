@@ -1,0 +1,38 @@
+import stdlib.
+
+import rec.
+import Ordinal-03.
+
+
+-- In this module we're going to go beyond epsilon0!
+module Big-Ordinals.
+
+
+-- Can we get ε1?  recall that ε1 is the supremum of
+-- {ε0, ε0^ε0, ε0^(ε0^ε0), ...}.  We already have
+-- the tooling to do this!
+epsilonTower : Nat ➔ Ord
+= rec epsilon0 (ordExp epsilon0).
+
+-- And now we take the limit...
+-- and get ε_0!
+epsilon1 : Ord = lim epsilonTower.
+
+-- Indeed we can repeat this process ad infinitum, with
+-- bigger and bigger towers.
+
+buildTower : Ord ➔ (Nat ➔ Ord)
+= λ o. rec o (ordExp o).
+
+buildEpsilon : Ord ➔ Ord = λ o. lim (buildTower o).
+epsilon2 : Ord = buildEpsilon epsilon1.
+
+
+-- What happens if we take the limit of all epsilon numbers,
+-- e.g, sup{ε0, ε1, ε2, ...}?
+-- We get ε_ω
+epsilon_omega : Ord = lim (rec epsilon0 buildEpsilon).
+
+-- And we can play this game to get ε_ω^2, ε_ω^ω, and so
+-- forth, until we get ε_ε0. At some point we end up around
+-- zeta.  Open a PR if you want to keep playing!
